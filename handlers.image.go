@@ -11,6 +11,7 @@ func handleImageUpload(w http.ResponseWriter, r *http.Request) {
 	postURL := getImageUploadURL(getContext(r))
 	tmplData := map[string]string{
 		"uploadURL": postURL,
+		"username": getUserEmail(r),
 	}
 	renderTemplate(w, "image_upload.html", tmplData)
 }
