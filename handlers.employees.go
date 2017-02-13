@@ -23,7 +23,7 @@ func handleEmployeeView(w http.ResponseWriter, r *http.Request) {
 	employeeEmail := r.FormValue("email")
 	employee, err := getEmployee(getContext(r), employeeEmail)
 	if err != nil {
-		fmt.Fprintf(w, "error getting employee info. %v", err)
+		http.Redirect(w,r, "/employeeedit", http.StatusFound)
 		return
 	}
 	images, err := getImageRecordsByEmail(getContext(r), employeeEmail)
