@@ -24,7 +24,6 @@ func handleEmployeeView(w http.ResponseWriter, r *http.Request) {
 	employee, err := getEmployee(getContext(r), employeeEmail)
 	if err != nil {
 		http.Redirect(w,r, "/employeeedit", http.StatusFound)
-		return
 	}
 	images, err := getImageRecordsByEmail(getContext(r), employeeEmail)
 	if err != nil {
@@ -32,11 +31,13 @@ func handleEmployeeView(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	tmplData := map[string]interface{}{
+		"username": getUserEmail(r),
 		"name":        employee.Name,
 		"bio":         employee.Bio,
 		"email":       employee.Email,
 		"lastUpdated": employee.LastUpdated.Format(time.UnixDate),
 		"images":      images,
+
 	}
 	renderTemplate(w, "employee_view.html", tmplData)
 }
@@ -62,6 +63,7 @@ func handleEmployeeEdit(w http.ResponseWriter, r *http.Request) {
 			"name":        employee.Name,
 			"bio":         employee.Bio,
 			"lastUpdated": employee.LastUpdated.Format(time.UnixDate),
+			"username": getUserEmail(r),
 		}
 	}
 	tmplData["email"] = email

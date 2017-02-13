@@ -10,8 +10,8 @@ import (
 func handleImageUpload(w http.ResponseWriter, r *http.Request) {
 	postURL := getImageUploadURL(getContext(r))
 	tmplData := map[string]string{
-		"uploadURL": postURL,
 		"username": getUserEmail(r),
+		"uploadURL": postURL,
 	}
 	renderTemplate(w, "image_upload.html", tmplData)
 }
@@ -23,15 +23,9 @@ func handleImageUploadComplete(w http.ResponseWriter, r *http.Request) {
 	name := otherValues.Get("name")
 	log.Println("Storing", name, " blob key:", blobKey)
 	if blobKey != "" {
-		if name == "" {
-			// delete the blob because we don't allow non-named images
-			deleteImageBlob(ctx, blobKey)
-			io.WriteString(w, "Image must have a name!")
-			return
-		}
 		updateImageRecord(ctx, name, blobKey, getUserEmail(r))
 		http.Redirect(w, r, "/imageview?blobkey="+blobKey, http.StatusFound)
-	}
+	}	
 	http.Redirect(w, r, "/", http.StatusFound)
 }
 
@@ -52,6 +46,7 @@ func handleImageView(w http.ResponseWriter, r *http.Request) {
 		"email":        img.Email,
 		"timeUploaded": img.TimeUploaded.Format(time.UnixDate),
 		"userEmail":    userEmail,
+		"username": getUserEmail(r),
 	}
 	renderTemplate(w, "image_view.html", tmplData)
 }
@@ -85,5 +80,5 @@ func handleImageDelete(w http.ResponseWriter, r *http.Request) {
 	// delete the image record
 	deleteImageRecord(ctx, blobkey)
 
-	io.WriteString(w, "image deleted")
+	http.Redirect(w, r, "/employeeview", http.StatusFound)
 }
