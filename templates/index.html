@@ -15,7 +15,7 @@
                     <li role="presentation" class="active"><a href="#">Home</a>
                     </li>
                     {{ if .username }}
-                    <li role="presentation"><a href="/employeeview">Profile</a>
+                    <li role="presentation"><a href="/employeeview?email={{ .username }}">Profile</a>
                     <li role="presentation"><a href="/imageupload">Upload</a>
                     </li>
                     <li role="presentation"><a href="{{ .logoutURL }}">Logout</a>
