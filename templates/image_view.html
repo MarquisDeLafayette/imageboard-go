@@ -11,7 +11,7 @@
         <div class="header">
             <nav>
                 <ul class="nav nav-pills pull-right">
-                    <li role="presentation" class="active"><a href="#">Home</a>
+                    <li role="presentation" class="active"><a href="/">Home</a>
                     </li>
                     {{ if .username }}
                     <li role="presentation"><a href="/employeeview?email={{ .username }}">Profile</a>
@@ -32,13 +32,12 @@
         </div>
     </div>
     <div class="container">
-        <h1>Image Record</h1>
-        <h2>Image Title</h2>
-        <p>{{ .name }}</p>
         <img src="/serveimage?blobkey={{ .blobKey }}"></img>
-        <h2>Uploaded by</h2>
+        <h3>Caption</h2>
+        <p>{{ .name }}</p>
+        <h3>Uploaded by</h2>
         <p>{{ .email }}</p>
-        <h2>Time Uploaded</h2>
+        <h3>Time Uploaded</h2>
         <p>{{ .timeUploaded }}</p>
     </div>
     <div class="container">

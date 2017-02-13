@@ -24,7 +24,7 @@
                     {{ else }}
                     <li role="presentation"><a href="{{ .loginURL }}">Sign In</a>
                     </li>
-                    <li role="presentation"><a href="/SignUp">Sign Up</a>
+                    <li role="presentation"><a href="https://accounts.google.com/SignUp?hl=en">Sign Up</a>
                     </li>
                     {{ end }}
                 </ul>
@@ -35,10 +35,7 @@
         {{ if .username }}
         <p>Logged in as {{ .username }}
         </p>
-        <p><a href="/employeeedit">Edit my info</a>
-        </p>
-        {{ else }}
-        <br></br>
+        {{ else }}  
         <div class="jumbotron">
         	<h1>Imjur</h1>
         	<p class="lead"></p>
@@ -46,6 +43,7 @@
       	</div>
         {{ end }}
         <div class="well">
+        	<legend>The Most Bacterial Images on the Internet, Sorted by Age</legend>
             <div class="row marketing">
                 <div class="col-lg-6">
                     <h4>Bucket List</h4>

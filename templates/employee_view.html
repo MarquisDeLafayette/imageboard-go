@@ -1,28 +1,51 @@
 <!DOCTYPE html>
-
 <head>
-    <title>Employee View</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" crossorigin="anonymous">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" crossorigin="anonymous"></script>
+   <title>Profile</title>
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" crossorigin="anonymous">
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" crossorigin="anonymous">
+   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" crossorigin="anonymous"></script>
 </head>
 <body>
-    <div class="container">
-        <h1>View User Info</h1>
-        <h2>Name</h2>
-        <p>{{ .name }}</p>
-        <h2>Bio</h2>
-        <p>{{ .bio }}</p>
-        <h2>Email</h2>
-        <p>{{ .email }}</p>
-        <h2>Last Updated</h2>
-        <p>{{ .lastUpdated }}</p>
-
-        <h2>Images Uploaded</h2>
-        <ul>
-        {{ range $img := .images }}
+   <div class="container">
+      <div class="header">
+         <nav>
+            <ul class="nav nav-pills pull-right">
+               <li role="presentation" class="active"><a href="/">Home</a>
+               </li>
+               {{ if .username }}
+               <li role="presentation"><a href="/employeeview">Edit Profile</a>
+               <li role="presentation"><a href="/imageupload">Upload</a>
+               </li>
+               <li role="presentation"><a href="{{ .logoutURL }}">Logout</a>
+               </li>
+               {{ else }}
+               <li role="presentation"><a href="{{ .loginURL }}">Sign In</a>
+               </li>
+               <li role="presentation"><a href="/SignUp">Sign Up</a>
+               </li>
+               {{ end }}
+            </ul>
+         </nav>
+         <h3 class="text-muted">Imjur</h3>
+        <p>Logged in as {{ .username }}
+        </p>         
+        <div class="well">
+            <legend>Profile</legend>
+            <h4>Name</h4>
+            <p>{{ .name }}</p>
+            <h4>Bio</h4>
+            <p>{{ .bio }}</p>
+            <h4>Email</h4>
+            <p>{{ .email }}</p>
+            <h4>Last Updated</h4>
+            <p>{{ .lastUpdated }}</p>
+            <h4>Images Uploaded</h4>
+            <ul>
+            {{ range $img := .images }}
             <li><a href="/imageview?blobkey={{ $img.BlobKey }}">{{ $img.Name }}</a></li>
-        {{ end }}
-        <ul>
-    </div>
+            {{ end }}
+            <ul>
+         </div>
+      </div>
+   </div>
 </body>

@@ -1,14 +1,38 @@
 <!DOCTYPE html>
 
 <head>
-    <title>Employee Edit</title>
+    <title>Profile Edit</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" crossorigin="anonymous">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" crossorigin="anonymous"></script>
 </head>
 <body>
     <div class="container">
-        <h1>Edit User Info</h1>
+        <div class="header">
+            <nav>
+                <ul class="nav nav-pills pull-right">
+                    <li role="presentation" class="active"><a href="#">Home</a>
+                    </li>
+                    {{ if .username }}
+                    <li role="presentation"><a href="/employeeview?email={{ .username }}">Profile</a>
+                    <li role="presentation"><a href="/imageupload">Upload</a>
+                    </li>
+                    <li role="presentation"><a href="{{ .logoutURL }}">Logout</a>
+                    </li>
+
+                    {{ else }}
+                    <li role="presentation"><a href="{{ .loginURL }}">Sign In</a>
+                    </li>
+                    <li role="presentation"><a href="https://accounts.google.com/SignUp?hl=en">Sign Up</a>
+                    </li>
+                    {{ end }}
+                </ul>
+            </nav>
+            <h3 class="text-muted">Imjur</h3>
+        </div>
+        <br></br>
+        <div class="well">
+        <legend>Edit User Info</legend>
         <form action="/employeeupdate" method="post">
             <div class="form-group">
                 <label for="name">Name</label>
@@ -20,7 +44,8 @@
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
-        <h2>Last Updated</h2>
+        <h3>Last Updated</h3>
         <p>{{ .lastUpdated }}</p>
+        </div>
     </div>
 </body>
