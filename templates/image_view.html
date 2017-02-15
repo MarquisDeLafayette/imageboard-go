@@ -19,11 +19,11 @@
                     </li>
                     <li role="presentation"><a href="{{ .logoutURL }}">Logout</a>
                     </li>
-
                     {{ else }}
+                    <li role="presentation"><a href="/guestimageupload">Upload</a>
                     <li role="presentation"><a href="{{ .loginURL }}">Sign In</a>
                     </li>
-                    <li role="presentation"><a href="/SignUp">Sign Up</a>
+                    <li role="presentation"><a href="https://accounts.google.com/SignUp?hl=en">Sign Up</a>
                     </li>
                     {{ end }}
                 </ul>
@@ -32,17 +32,32 @@
         </div>
     </div>
     <div class="container">
+        <br></br>
         <img src="/serveimage?blobkey={{ .blobKey }}"></img>
         <h3>Caption</h2>
         <p>{{ .name }}</p>
         <h3>Uploaded by</h2>
+        {{ if .username }}
         <p>{{ .email }}</p>
+        {{ else }}
+        <p> Guest </p>
+        {{ end }}
         <h3>Time Uploaded</h2>
         <p>{{ .timeUploaded }}</p>
+
     </div>
     <div class="container">
         {{ if eq .userEmail .email }}
-        <a href="/imagedelete?blobkey={{ .blobKey }}">Delete</a>
+            {{ if .username }}
+            <form action="/imageedit?blobkey={{ .blobKey }}" method="post">
+                <div class="form-group">
+                    <label for="name">Caption</label>
+                        <textarea class="form-control" type="text" id="captionEdit" name="captionEdit"></textarea>
+                    </div>                    
+                    <button type="submit" class="btn btn-primary">Edit</button>                    
+                </form>
+            <a href="/imagedelete?blobkey={{ .blobKey }}" class="btn btn-danger" role="button">Delete</a> 
+            {{ end }}  
         {{ end }}
     </div>
 </body>
