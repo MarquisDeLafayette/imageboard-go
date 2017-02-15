@@ -16,6 +16,14 @@ func handleImageUpload(w http.ResponseWriter, r *http.Request) {
 	renderTemplate(w, "image_upload.html", tmplData)
 }
 
+func handleGuestImageUpload(w http.ResponseWriter, r *http.Request) {
+	postURL := getImageUploadURL(getContext(r))
+	tmplData := map[string]string{
+		"uploadURL": postURL,
+	}
+	renderTemplate(w, "image_upload.html", tmplData)
+}
+
 func handleImageUploadComplete(w http.ResponseWriter, r *http.Request) {
 	ctx := getContext(r)
 	// XXX: blobstore parse must be called before r.FormValue
@@ -79,6 +87,30 @@ func handleImageDelete(w http.ResponseWriter, r *http.Request) {
 	deleteImageBlob(ctx, blobkey)
 	// delete the image record
 	deleteImageRecord(ctx, blobkey)
+
+	http.Redirect(w, r, "/employeeview", http.StatusFound)
+}
+
+func handleCaptionEdit(w http.ResponseWriter, r *http.Request) {
+	email := getUserEmail(r)
+	blobkey := r.FormValue("blobkey")
+	ctx := getContext(r)
+	caption := r.FormValue("captionEdit")
+
+	record, err := getImageRecord(ctx, blobkey)
+
+	if err != nil {
+		io.WriteString(w, "Error getting blob")
+		log.Println(err)
+		return
+	}
+
+	if record.Email != email {
+		io.WriteString(w, "You can only edit images uploaded by you")
+		return
+	}
+
+	updateImageRecord(ctx, caption, blobkey, email)
 
 	http.Redirect(w, r, "/employeeview", http.StatusFound)
 }

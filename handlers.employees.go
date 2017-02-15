@@ -21,9 +21,12 @@ func handleEmployeeUpdate(w http.ResponseWriter, r *http.Request) {
 
 func handleEmployeeView(w http.ResponseWriter, r *http.Request) {
 	employeeEmail := r.FormValue("email")
+	if employeeEmail == "" {
+		employeeEmail = getUserEmail(r)
+	}
 	employee, err := getEmployee(getContext(r), employeeEmail)
 	if err != nil {
-		http.Redirect(w,r, "/employeeedit", http.StatusFound)
+		//http.Redirect(w,r, "/employeeedit", http.StatusFound)
 	}
 	images, err := getImageRecordsByEmail(getContext(r), employeeEmail)
 	if err != nil {
