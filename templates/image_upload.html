@@ -2,6 +2,7 @@
 
 <head>
     <title>Imjur</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" crossorigin="anonymous">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" crossorigin="anonymous"></script>
@@ -15,7 +16,7 @@
                     <li role="presentation" class="active"><a href="/">Home</a>
                     </li>
                     {{ if .username }}
-                    <li role="presentation"><a href="/employeeview">Profile</a>
+                    <li role="presentation"><a href="/userview">Profile</a>
                     <li role="presentation"><a href="/imageupload">Upload</a>
                     </li>
                     <li role="presentation"><a href="{{ .logoutURL }}">Logout</a>
@@ -31,8 +32,13 @@
             </nav>
             <h3 class="text-muted">Imjur</h3>
         </div>
-        <p>Logged in as {{ .username }}
-        </p>        
+        {{ if .username }}
+            <p>Logged in as {{ .username }}
+            </p> 
+        {{ else }}   
+            <p>Logged in as a Guest
+            </p>      
+        {{ end }}
         <div class="well">
             <legend>Upload a File</legend>
 

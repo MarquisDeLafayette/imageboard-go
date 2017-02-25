@@ -2,20 +2,21 @@
 
 <head>
     <title>Imjur</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" crossorigin="anonymous">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" crossorigin="anonymous"></script>   
 </head>
 
 <body>
     <div class="container">
         <div class="header">
-            <nav>
+            <nav>                
                 <ul class="nav nav-pills pull-right">
                     <li role="presentation" class="active"><a href="#">Home</a>
                     </li>
                     {{ if .username }}
-                    <li role="presentation"><a href="/employeeview?email={{ .username }}">Profile</a>
+                    <li role="presentation"><a href="/userview?email={{ .username }}">Profile</a>
                     <li role="presentation"><a href="/imageupload">Upload</a>
                     </li>
                     <li role="presentation"><a href="{{ .logoutURL }}">Logout</a>
@@ -33,52 +34,46 @@
         </div>
 
         {{ if .username }}
-        <p>Logged in as {{ .username }}
-        </p>
-        {{ else }}  
+            <p>Logged in as {{ .username }}
+            </p> 
+        {{ else }}
+        <p>Logged in as a Guest
+        </p>  
         <div class="jumbotron">
         	<h1>Imjur</h1>
         	<p class="lead"></p>
-        	<p><a class="btn btn-lg btn-success" href="/showSignUp" role="button">Sign up today</a></p>
+        	<p><a class="btn btn-lg btn-success" href="https://accounts.google.com/SignUp?hl=en" role="button">Sign up today</a></p>
       	</div>
         {{ end }}
         <div class="well">
         	<legend>The Most Bacterial Images on the Internet, Sorted by Age</legend>
             <div class="row marketing">
-                <div class="col-lg-6">
-                    <h4>Bucket List</h4>
-                    <p>Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.</p>
-
-                    <h4>Bucket List</h4>
-                    <p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Cras mattis consectetur purus sit amet fermentum.</p>
-
-                    <h4>Bucket List</h4>
-                    <p>Maecenas sed diam eget risus varius blandit sit amet non magna.</p>
-                </div>
-
-                <div class="col-lg-6">
-                    <h4>Bucket List</h4>
-                    <p>Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.</p>
-
-                    <h4>Bucket List</h4>
-                    <p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Cras mattis consectetur purus sit amet fermentum.</p>
-
-                    <h4>Bucket List</h4>
-                    <p>Maecenas sed diam eget risus varius blandit sit amet non magna.</p>
-                </div>
+                {{ range $img := .images }}
+                    <li><a href="/imageview?blobkey={{ $img.BlobKey }}">{{ $img.Name }}</a></li>
+                {{ end }}
+                <div class="text-center">
+                    <ul class="pagination">
+                        <li><a href="/?page=1" class="btn btn" role="button">1</a></li>
+                        <li><a href="/?page=2" class="btn btn" role="button">2</a></li>
+                        <li><a href="/?page=3" class="btn btn" role="button">3</a></li>
+                        <li><a href="/?page=4" class="btn btn" role="button">4</a></li>
+                        <li><a href="/?page=5" class="btn btn" role="button">5</a></li>
+                    </ul>
+                </div>                
             </div>
         </div>
     </div>
 
     <div class="container">
-        <h2>Registered Users</h2> {{ range $employee := .employees }}
-        <a href="/employeeview?email={{ $employee.Email }}">{{ $employee.Name }}</a> ({{ $employee.Email }})
-        <br> {{ end }}
+        <h2>Registered Users</h2> 
+        {{ range $user := .users }}
+            <a href="/userview?email={{ $user.Email }}">{{ $user.Name }}</a> ({{ $user.Email }})
+            <br> 
+        {{ end }}
 
         <footer class="footer">
             <p>{{- .time -}}</p>
             <p>&copy; Company 2017</p>
         </footer>
     </div>
-
 </body>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 <head>
-    <title>Image View</title>
+    <title>Profile Edit</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" crossorigin="anonymous">
@@ -20,8 +20,8 @@
                     </li>
                     <li role="presentation"><a href="{{ .logoutURL }}">Logout</a>
                     </li>
+
                     {{ else }}
-                    <li role="presentation"><a href="/guestimageupload">Upload</a>
                     <li role="presentation"><a href="{{ .loginURL }}">Sign In</a>
                     </li>
                     <li role="presentation"><a href="https://accounts.google.com/SignUp?hl=en">Sign Up</a>
@@ -30,42 +30,23 @@
                 </ul>
             </nav>
             <h3 class="text-muted">Imjur</h3>
-            {{ if .username }}
-                <p>Logged in as {{ .username }}
-                </p> 
-            {{ else }}   
-                <p>Logged in as a Guest
-                </p>      
-            {{ end }}
         </div>
-    </div>
-    
-    <div class="container">
-        <img src="/serveimage?blobkey={{ .blobKey }}"></img>
-        <h3>Caption</h2>
-        <p>{{ .name }}</p>
-        <h3>Uploaded by</h2>
-        {{ if .username }}
-        <p>{{ .email }}</p>
-        {{ else }}
-        <p> Guest </p>
-        {{ end }}
-        <h3>Time Uploaded</h2>
-        <p>{{ .timeUploaded }}</p>
-
-    </div>
-    <div class="container">
-        {{ if eq .userEmail .email }}
-            {{ if .username }}
-            <form action="/imageedit?blobkey={{ .blobKey }}" method="post">
-                <div class="form-group">
-                    <label for="name">Caption</label>
-                        <textarea class="form-control" type="text" id="captionEdit" name="captionEdit"></textarea>
-                    </div>                    
-                    <button type="submit" class="btn btn-primary">Edit</button>                    
-                </form>
-            <a href="/imagedelete?blobkey={{ .blobKey }}" class="btn btn-danger" role="button">Delete</a> 
-            {{ end }}  
-        {{ end }}
+        <br></br>
+        <div class="well">
+        <legend>Edit User Info</legend>
+        <form action="/userupdate" method="post">
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" class="form-control" id="name" name="name" value="{{ .name }}"> 
+            </div>
+            <div class="form-group">
+                <label for="bio">Bio</label>
+                <input type="text" class="form-control" id="bio" name="bio" value="{{ .bio }}"> 
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+        <h3>Last Updated</h3>
+        <p>{{ .lastUpdated }}</p>
+        </div>
     </div>
 </body>
