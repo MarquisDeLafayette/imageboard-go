@@ -8,6 +8,7 @@ import (
 	"path"
 )
 
+// Render HTML Pages from Directory
 func renderTemplateFromDir(w http.ResponseWriter, directoryName string, fileName string, data interface{}) {
 	//log.Println("Rendering " + directoryName + "/" + fileName)
 	fp := path.Join(directoryName, fileName)
@@ -43,6 +44,7 @@ func renderTemplateFromDir(w http.ResponseWriter, directoryName string, fileName
 	}
 }
 
+// Render HTML Template
 func renderTemplate(w http.ResponseWriter, fileName string, data interface{}) {
 	renderTemplateFromDir(w, "templates", fileName, data)
 }

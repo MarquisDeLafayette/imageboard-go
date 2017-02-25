@@ -10,8 +10,10 @@ import (
 	"appengine"
 	"appengine/blobstore"
 	"appengine/datastore"
+
 )
 
+// Image Structure
 type ImageRecord struct {
 	Name         string
 	BlobKey      string
@@ -19,6 +21,7 @@ type ImageRecord struct {
 	TimeUploaded time.Time
 }
 
+// Gets Image Upload URL
 func getImageUploadURL(ctx appengine.Context) string {
 	uploadURL, err := blobstore.UploadURL(ctx, "/imageupload_complete", nil)
 	if err != nil {
@@ -28,10 +31,12 @@ func getImageUploadURL(ctx appengine.Context) string {
 	return uploadURL.String()
 }
 
+// Gets Image by Blobkey
 func serveImageByKey(w http.ResponseWriter, key string) {
 	blobstore.Send(w, appengine.BlobKey(key))
 }
 
+// Gets Image Parse Upload Key
 func getImageParseUploadKey(ctx appengine.Context, r *http.Request) (string, url.Values) {
 	blobs, otherVals, err := blobstore.ParseUpload(r)
 	if err != nil {
@@ -46,15 +51,18 @@ func getImageParseUploadKey(ctx appengine.Context, r *http.Request) (string, url
 	return string(file[0].BlobKey), otherVals
 }
 
+// Delete Image Blob
 func deleteImageBlob(ctx appengine.Context, blobkey string) {
 	blobstore.Delete(ctx, appengine.BlobKey(blobkey))
 }
 
+// Deletes Record of Image
 func deleteImageRecord(ctx appengine.Context, blobkey string) {
 	key := datastore.NewKey(ctx, "ImageRecord", blobkey, 0, nil)
 	datastore.Delete(ctx, key)
 }
 
+// Updates Database of Images
 func updateImageRecord(ctx appengine.Context, name, blobkey, email string) {
 	img := &ImageRecord{
 		Name:         name,
@@ -72,6 +80,7 @@ func updateImageRecord(ctx appengine.Context, name, blobkey, email string) {
 	}
 }
 
+// Gets Record of Images
 func getImageRecord(ctx appengine.Context, blobKey string) (ImageRecord, error) {
 	key := datastore.NewKey(ctx, "ImageRecord", blobKey, 0, nil)
 	var img ImageRecord
@@ -82,6 +91,7 @@ func getImageRecord(ctx appengine.Context, blobKey string) (ImageRecord, error) 
 	return img, err
 }
 
+// Gets Images Based off Email
 func getImageRecordsByEmail(ctx appengine.Context, email string) ([]ImageRecord, error) {
 	q := datastore.NewQuery("ImageRecord").
 		Filter("Email = ", email).
@@ -92,4 +102,43 @@ func getImageRecordsByEmail(ctx appengine.Context, email string) ([]ImageRecord,
 		log.Println(err)
 	}
 	return results, err
+}
+
+// Gets all Images Ordered by Date Uploaded
+func getAllImages(ctx appengine.Context, pageNumber int) []ImageRecord {
+	// Create a query for all Person entities.
+	q := datastore.NewQuery("ImageRecord").
+		Order("-TimeUploaded")
+
+	images := []ImageRecord{}
+
+	// Iterate over the results.
+	t := q.Run(ctx) 
+	for {
+		var i ImageRecord
+		_, err := t.Next(&i)
+		if err == datastore.Done {
+			break
+		}
+		if err != nil {
+			break
+		}
+		// push to arr
+		images = append(images, i)
+	}
+
+	// make a subarray
+	// XXX: hard code to display 10 images at a time
+	fromIndex := (pageNumber - 1) * 10
+	toIndex := fromIndex + 10
+
+	if (toIndex > len(images)){
+		if(fromIndex > len(images)){
+			return images[0:0]
+		}else{
+			return images[fromIndex:len(images)]
+		}
+	} else {
+		return images[fromIndex:toIndex]
+	}
 }

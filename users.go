@@ -7,6 +7,7 @@ import (
 	"appengine/user"
 )
 
+// Gets User Email
 func getUserEmail(r *http.Request) string {
 	c := appengine.NewContext(r)
 	u := user.Current(c)
@@ -16,6 +17,7 @@ func getUserEmail(r *http.Request) string {
 	return ""
 }
 
+// Gets Login URL
 func getLoginURL(r *http.Request, redirURL string) string {
 	c := appengine.NewContext(r)
 	url, err := user.LoginURL(c, redirURL)
@@ -25,6 +27,7 @@ func getLoginURL(r *http.Request, redirURL string) string {
 	return url
 }
 
+// Get Logout URL
 func getLogoutURL(r *http.Request, redirURL string) string {
 	c := appengine.NewContext(r)
 	url, err := user.LogoutURL(c, redirURL)
@@ -34,6 +37,7 @@ func getLogoutURL(r *http.Request, redirURL string) string {
 	return url
 }
 
+// Get Page Context
 func getContext(r *http.Request) appengine.Context {
 	return appengine.NewContext(r)
 }

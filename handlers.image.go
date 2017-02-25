@@ -7,23 +7,30 @@ import (
 	"time"
 )
 
+// Handles Image Upload Page
 func handleImageUpload(w http.ResponseWriter, r *http.Request) {
 	postURL := getImageUploadURL(getContext(r))
 	tmplData := map[string]string{
 		"username": getUserEmail(r),
 		"uploadURL": postURL,
+		"loginURL":  getLoginURL(r, "/"),
+		"logoutURL": getLogoutURL(r, ""),
 	}
 	renderTemplate(w, "image_upload.html", tmplData)
 }
 
+// Handles Image Upload Page for Guests
 func handleGuestImageUpload(w http.ResponseWriter, r *http.Request) {
 	postURL := getImageUploadURL(getContext(r))
 	tmplData := map[string]string{
 		"uploadURL": postURL,
+		"loginURL":  getLoginURL(r, "/"),
+		"logoutURL": getLogoutURL(r, ""),
 	}
 	renderTemplate(w, "image_upload.html", tmplData)
 }
 
+// Handles Image Upload Page After It's Done
 func handleImageUploadComplete(w http.ResponseWriter, r *http.Request) {
 	ctx := getContext(r)
 	// XXX: blobstore parse must be called before r.FormValue
@@ -37,6 +44,7 @@ func handleImageUploadComplete(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/", http.StatusFound)
 }
 
+// Handle Image View Page
 func handleImageView(w http.ResponseWriter, r *http.Request) {
 	userEmail := getUserEmail(r)
 	blobKey := r.FormValue("blobkey")
@@ -54,11 +62,14 @@ func handleImageView(w http.ResponseWriter, r *http.Request) {
 		"email":        img.Email,
 		"timeUploaded": img.TimeUploaded.Format(time.UnixDate),
 		"userEmail":    userEmail,
-		"username": getUserEmail(r),
+		"loginURL": 	getLoginURL(r, "/"),
+		"logoutURL": 	getLogoutURL(r, ""),
+		"username": 	getUserEmail(r),
 	}
 	renderTemplate(w, "image_view.html", tmplData)
 }
 
+// Handles Serving Images
 func handleImageServe(w http.ResponseWriter, r *http.Request) {
 	blobKey := r.FormValue("blobkey")
 	if blobKey != "" {
@@ -66,6 +77,7 @@ func handleImageServe(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// Handles Image Deletion
 func handleImageDelete(w http.ResponseWriter, r *http.Request) {
 	email := getUserEmail(r)
 	blobkey := r.FormValue("blobkey")
@@ -88,9 +100,10 @@ func handleImageDelete(w http.ResponseWriter, r *http.Request) {
 	// delete the image record
 	deleteImageRecord(ctx, blobkey)
 
-	http.Redirect(w, r, "/employeeview", http.StatusFound)
+	http.Redirect(w, r, "/userview", http.StatusFound)
 }
 
+// Handles the Editing of Captions
 func handleCaptionEdit(w http.ResponseWriter, r *http.Request) {
 	email := getUserEmail(r)
 	blobkey := r.FormValue("blobkey")
@@ -112,5 +125,7 @@ func handleCaptionEdit(w http.ResponseWriter, r *http.Request) {
 
 	updateImageRecord(ctx, caption, blobkey, email)
 
-	http.Redirect(w, r, "/employeeview", http.StatusFound)
+	http.Redirect(w, r, "/userview", http.StatusFound)
 }
+
+

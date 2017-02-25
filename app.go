@@ -6,17 +6,20 @@ import (
 	"github.com/gorilla/mux"
 )
 
+// Initializes App
 func init() {
 	http.Handle("/", getHandlers())
 }
 
+// Handles Page/Function Requests
 func getHandlers() *mux.Router {
 	router := mux.NewRouter()
 	router.HandleFunc("/", handleIndex).Methods("GET")
-	router.HandleFunc("/employeeview", handleEmployeeView).Methods("GET")
-	router.HandleFunc("/employeeedit", handleEmployeeEdit).Methods("GET")
-	router.HandleFunc("/employeeupdate", handleEmployeeUpdate).Methods("POST")
 
+	router.HandleFunc("/userview", handleUserView).Methods("GET")
+	router.HandleFunc("/useredit", handleUserEdit).Methods("GET")
+	router.HandleFunc("/userupdate", handleUserUpdate).Methods("POST")
+	
 	router.HandleFunc("/imageupload", handleImageUpload).Methods("GET")
 	router.HandleFunc("/guestimageupload", handleGuestImageUpload).Methods("GET")
 	router.HandleFunc("/imageupload_complete", handleImageUploadComplete).Methods("POST")
